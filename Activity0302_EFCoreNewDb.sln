@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Activity0302_EFCoreNewDb", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryDatabaseCore", "InventoryDatabaseCore\InventoryDatabaseCore.csproj", "{57FC12C5-398C-4F18-A5B7-BD130B493A31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryModels", "InventoryModels\InventoryModels.csproj", "{8AA22541-A5B9-4FB4-B315-51D7D1E5B206}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryModels", "InventoryModels\InventoryModels.csproj", "{8AA22541-A5B9-4FB4-B315-51D7D1E5B206}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryHelpers", "InventoryHelpers\InventoryHelpers.csproj", "{3EFEAACA-6C3B-4925-BA9F-5C3EC3F4EAFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{8AA22541-A5B9-4FB4-B315-51D7D1E5B206}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AA22541-A5B9-4FB4-B315-51D7D1E5B206}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AA22541-A5B9-4FB4-B315-51D7D1E5B206}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EFEAACA-6C3B-4925-BA9F-5C3EC3F4EAFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EFEAACA-6C3B-4925-BA9F-5C3EC3F4EAFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EFEAACA-6C3B-4925-BA9F-5C3EC3F4EAFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EFEAACA-6C3B-4925-BA9F-5C3EC3F4EAFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

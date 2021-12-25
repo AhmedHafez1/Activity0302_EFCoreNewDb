@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Activity0302_EFCoreNewDb
+namespace InventoryHelpers
 {
     public sealed class ConfigurationBuilderSingleton
     {
