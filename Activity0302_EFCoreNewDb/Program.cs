@@ -16,7 +16,7 @@ namespace Activity0302_EFCoreNewDb
         static void Main(string[] args)
         {
             BuildOptions();
-            // InsertItems();
+            InsertItems();
             ListInventory();
         }
         static void BuildOptions()
@@ -29,7 +29,7 @@ namespace Activity0302_EFCoreNewDb
         {
             using (var dbContext = new InventoryDbContext(_optionsBuilder.Options))
             {
-                dbContext.Items.Take(5).ToList()
+                dbContext.Items.Take(5).OrderBy(x => x.Name).ToList()
                .ForEach(i => Console.WriteLine($"{i.Id} - {i.Name}"));
             }
 
