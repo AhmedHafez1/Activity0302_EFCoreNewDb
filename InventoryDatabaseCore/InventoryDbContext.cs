@@ -4,6 +4,7 @@ using System.IO;
 using InventoryModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Shared;
 
 namespace InventoryDatabaseCore
 {
@@ -40,7 +41,21 @@ namespace InventoryDatabaseCore
 
             foreach (var entry in tracker.Entries())
             {
-                Debug.WriteLine($"{entry.Entity} has state { entry.State}");
+                if (entry.Entity is FullAuditModel entityReference)
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            entityReference.CreatedDate = DateTime.Now;
+                            break;
+                        case EntityState.Deleted:
+                        case EntityState.Modified:
+                            entityReference.LastModifiedDate = DateTime.Now;
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
 
             return base.SaveChanges();

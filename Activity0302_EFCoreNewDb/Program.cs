@@ -18,6 +18,7 @@ namespace Activity0302_EFCoreNewDb
             BuildOptions();
             DealeteAllItems();
             InsertItems();
+            UpdateItems();
             ListInventory();
         }
         static void BuildOptions()
@@ -32,7 +33,11 @@ namespace Activity0302_EFCoreNewDb
             using (var db = new InventoryDbContext())
             {
                 var items = db.Items.ToList();
-                db.RemoveRange(items);
+                foreach (var item in items)
+                {
+                    item.LastModifiedUserId = 1;
+                }
+                db.Items.RemoveRange(items);
                 db.SaveChanges();
             }
         }
@@ -50,17 +55,37 @@ namespace Activity0302_EFCoreNewDb
         {
             var items = new List<Item>
             {
-                new Item { Name = "Top Gun" },
-                new Item { Name = "Batman Begins" },
-                new Item { Name = "Inception" },
-                new Item { Name = "Star Wars: The Empire Strikes Back" },
-                new Item { Name = "Remember the Titans" }
+                new Item { Name = "Top Gun", IsActive = true, Description="I feel the need, the need for speed" },
+                new Item { Name = "Batman Begins", IsActive = true, Description = "Attitude reflects leadership" },
+                new Item { Name = "Inception", IsActive = true, Description = "You either die the hero or live long" },
+                new Item { Name = "Star Wars: The Empire Strikes Back", IsActive = true, Description = "He will join us or die, master" },
+                new Item { Name = "Remember the Titans", IsActive = true, Description = "Attitude reflects leadership" }
             };
 
             using (var dbContext = new InventoryDbContext(_optionsBuilder.Options))
             {
+                foreach (var item in items)
+                {
+                    item.CreatedByUserId = 1;
+                }
                 dbContext.Items.AddRange(items);
                 dbContext.SaveChanges();
+            }
+        }
+
+        static void UpdateItems()
+        {
+            using (var db = new InventoryDbContext(_optionsBuilder.Options))
+            {
+                var items = db.Items.ToList();
+                foreach (var item in items)
+                {
+                    item.LastModifiedUserId = 1;
+                    item.CurrentOrFinalPrice = 9.99M;
+                }
+                db.Items.UpdateRange(items);
+                db.SaveChanges();
+
             }
         }
     }
