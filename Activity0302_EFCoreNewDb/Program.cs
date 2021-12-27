@@ -16,6 +16,7 @@ namespace Activity0302_EFCoreNewDb
         static void Main(string[] args)
         {
             BuildOptions();
+            DealeteAllItems();
             InsertItems();
             ListInventory();
         }
@@ -24,6 +25,16 @@ namespace Activity0302_EFCoreNewDb
             _configuration = ConfigurationBuilderSingleton.ConfigurationRoot;
             _optionsBuilder = new DbContextOptionsBuilder<InventoryDbContext>();
             _optionsBuilder.UseSqlServer(_configuration.GetConnectionString("InventoryManager"));
+        }
+
+        static void DealeteAllItems()
+        {
+            using (var db = new InventoryDbContext())
+            {
+                var items = db.Items.ToList();
+                db.RemoveRange(items);
+                db.SaveChanges();
+            }
         }
         static void ListInventory()
         {

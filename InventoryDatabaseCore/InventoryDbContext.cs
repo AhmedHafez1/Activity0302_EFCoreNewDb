@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using InventoryModels;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,18 @@ namespace InventoryDatabaseCore
 
                 optionsBuilder.UseSqlServer(connectionString);
             }
+        }
+
+        public override int SaveChanges()
+        {
+            var tracker = ChangeTracker;
+
+            foreach (var entry in tracker.Entries())
+            {
+                Debug.WriteLine($"{entry.Entity} has state { entry.State}");
+            }
+
+            return base.SaveChanges();
         }
     }
 }
