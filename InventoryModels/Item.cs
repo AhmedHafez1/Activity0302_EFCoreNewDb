@@ -29,5 +29,8 @@ namespace InventoryModels
 
         [Range(InventoryModelConstants.MINIMUM_PRICE, InventoryModelConstants.MINIMUM_PRICE)]
         public decimal? CurrentOrFinalPrice { get; set; }
+
+        public virtual Category Category { get; set; }
+        public int? CategoryId { get; set; }
     }
 }
