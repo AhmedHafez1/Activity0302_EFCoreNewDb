@@ -23,6 +23,16 @@ namespace InventoryDatabaseCore
         public InventoryDbContext(DbContextOptions options) : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Unique, Non-clustered Index for ItemGenre relationships
+            modelBuilder.Entity<ItemGenre>()
+            .HasIndex(ig => new { ig.ItemId, ig.GenreId })
+            .IsUnique()
+            .IsClustered(false);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
