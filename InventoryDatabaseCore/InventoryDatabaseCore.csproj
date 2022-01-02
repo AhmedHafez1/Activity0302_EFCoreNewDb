@@ -16,8 +16,8 @@
     <None Remove="Migrations\Scripts\Procedures\GetItemsForListing\GetItemsForListing.v1.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\Scripts\Procedures\GetItemsForListing\GetItemsForListing.v1.sql" />
-    <Compile Include="Migrations\Scripts\Procedures\GetItemsForListing\GetItemsForListing.v0.sql" />
+    <EmbeddedResource Include="Migrations\Scripts\Procedures\GetItemsForListing\GetItemsForListing.v0.sql" />
+    <EmbeddedResource Include="Migrations\Scripts\Procedures\GetItemsForListing\GetItemsForListing.v1.sql" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.13" />
@@ -32,7 +32,6 @@
   <ItemGroup>
     <ProjectReference Include="..\InventoryModels\InventoryModels.csproj" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup Condition="$(VisualStudioVersion) == '17.0'">
     <Reference Include="Microsoft.Data.Tools.Schema.Sql, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(SSDTPath)\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
