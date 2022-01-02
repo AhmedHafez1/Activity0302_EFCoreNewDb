@@ -6,7 +6,7 @@ namespace InventoryDatabaseCore.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"CREATE PROCEDURE dbo.GetItemsForListing
+            migrationBuilder.Sql(@"CREATE OR ALTER PROCEDURE dbo.GetItemsForListing
                 @minDate DATETIME = null,
                 @maxDate DATETIME = null
                 AS
@@ -20,12 +20,13 @@ namespace InventoryDatabaseCore.Migrations
                 LEFT JOIN dbo.Categories cat on item.CategoryId = cat.Id
                 WHERE(@minDate IS NULL OR item.CreatedDate >= @minDate)
                 AND(@maxDate IS NULL OR item.CreatedDate <= @maxDate)
+                AND(@maxDate IS NULL OR item.CreatedDate <= @maxDate)
                 END");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DROP PROCEDURE dbo.GetItemsForListing");
+            migrationBuilder.Sql("DROP PROCEDURE IF EXISTS dbo.GetItemsForListing");
         }
     }
 }
