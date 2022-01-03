@@ -16,6 +16,7 @@ namespace InventoryDatabaseCore
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryColor> CategoryColors { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<GetItemsForListingDTO> ItemsForListing { get; set; }
 
         public InventoryDbContext() : base()
         {
@@ -31,6 +32,12 @@ namespace InventoryDatabaseCore
             .HasIndex(ig => new { ig.ItemId, ig.GenreId })
             .IsUnique()
             .IsClustered(false);
+
+            modelBuilder.Entity<GetItemsForListingDTO>(x =>
+            {
+                x.HasNoKey();
+                x.ToView("ItemsForListing");
+            });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

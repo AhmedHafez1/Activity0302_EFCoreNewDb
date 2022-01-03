@@ -20,7 +20,22 @@ namespace Activity0302_EFCoreNewDb
             InsertItems();
             UpdateItems();
             ListInventory();
+            GetItemsForListing();
         }
+
+        static void GetItemsForListing()
+        {
+            using (var db = new InventoryDbContext(_optionsBuilder.Options))
+            {
+                var results = db.ItemsForListing.FromSqlRaw("EXECUTE dbo.GetItemsForListing").ToList();
+
+                foreach (var item in results)
+                {
+                    Console.WriteLine($"ITEM {item.Name} - {item.Description}");
+                }
+            }
+        }
+
         static void BuildOptions()
         {
             _configuration = ConfigurationBuilderSingleton.ConfigurationRoot;
