@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Data.SqlClient;
 
 namespace Activity0302_EFCoreNewDb
 {
@@ -21,6 +22,7 @@ namespace Activity0302_EFCoreNewDb
             UpdateItems();
             ListInventory();
             GetItemsForListing();
+            GetItemsForListingWithParams();
         }
 
         static void GetItemsForListing()
@@ -32,6 +34,22 @@ namespace Activity0302_EFCoreNewDb
                 foreach (var item in results)
                 {
                     Console.WriteLine($"ITEM {item.Name} - {item.Description}");
+                }
+            }
+        }
+
+        static void GetItemsForListingWithParams()
+        {
+            using (var db = new InventoryDbContext(_optionsBuilder.Options))
+            {
+                var minDate = new SqlParameter("minDate", new DateTime(2022, 1, 1));
+                var maxDate = new SqlParameter("maxDate", new DateTime(2022, 1, 4));
+
+                var results = db.ItemsForListing.FromSqlRaw("EXECUTE dbo.GetItemsForListing @minDate, @maxDate", minDate, maxDate).ToList();
+
+                foreach (var item in results)
+                {
+                    Console.WriteLine($"ITEM {item.Name} - {item.Description} - {item.CategoryName}");
                 }
             }
         }
