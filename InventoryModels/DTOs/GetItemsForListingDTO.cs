@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InventoryModels
+namespace InventoryModels.DTOs
 {
     public class GetItemsForListingDTO
     {

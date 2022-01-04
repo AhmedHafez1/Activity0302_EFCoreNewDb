@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using InventoryModels;
+using InventoryModels.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Shared;
@@ -17,6 +18,7 @@ namespace InventoryDatabaseCore
         public DbSet<CategoryColor> CategoryColors { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<GetItemsForListingDTO> ItemsForListing { get; set; }
+        public DbSet<AllItemsPipeDelimitedStringDto> AllItemsOutput { get; set; }
 
         public InventoryDbContext() : base()
         {
@@ -37,6 +39,12 @@ namespace InventoryDatabaseCore
             {
                 x.HasNoKey();
                 x.ToView("ItemsForListing");
+            });
+
+            modelBuilder.Entity<AllItemsPipeDelimitedStringDto>(x =>
+            {
+                x.HasNoKey();
+                x.ToView("AllItemsOutput");
             });
         }
 
