@@ -19,6 +19,7 @@ namespace InventoryDatabaseCore
         public DbSet<Genre> Genres { get; set; }
         public DbSet<GetItemsForListingDTO> ItemsForListing { get; set; }
         public DbSet<AllItemsPipeDelimitedStringDto> AllItemsOutput { get; set; }
+        public DbSet<GetItemsTotalValueDto> GetItemsTotalValues { get; set; }
 
         public InventoryDbContext() : base()
         {
@@ -45,6 +46,58 @@ namespace InventoryDatabaseCore
             {
                 x.HasNoKey();
                 x.ToView("AllItemsOutput");
+            });
+
+            modelBuilder.Entity<GetItemsTotalValueDto>(x =>
+            {
+                x.HasNoKey();
+                x.ToView("GetItemsTotalValues");
+            });
+
+            modelBuilder.Entity<Genre>(x =>
+            {
+                x.HasData(
+                new Genre()
+                {
+                    Id = 6,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    IsDeleted = false,
+                    Name = "Fantasy"
+                },
+                new Genre()
+                {
+                    Id = 7,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    IsDeleted = false,
+                    Name = "Sci/Fi"
+                },
+                new Genre()
+                {
+                    Id = 8,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    IsDeleted = false,
+                    Name = "Horror"
+                },
+                new Genre()
+                {
+                    Id = 9,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    IsDeleted = false,
+                    Name = "Comedy"
+                },
+                new Genre()
+                {
+                    Id = 10,
+                    CreatedDate = DateTime.Now,
+                    IsActive = true,
+                    IsDeleted = false,
+                    Name = "Drama"
+                }
+                );
             });
         }
 

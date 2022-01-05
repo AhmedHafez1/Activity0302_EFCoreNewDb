@@ -17,41 +17,10 @@ namespace Activity0302_EFCoreNewDb
         static void Main(string[] args)
         {
             BuildOptions();
-            DealeteAllItems();
-            InsertItems();
-            UpdateItems();
             ListInventory();
-            GetItemsForListing();
             GetItemsForListingWithParams();
-        }
-
-        static void GetItemsForListing()
-        {
-            using (var db = new InventoryDbContext(_optionsBuilder.Options))
-            {
-                var results = db.ItemsForListing.FromSqlRaw("EXECUTE dbo.GetItemsForListing").ToList();
-
-                foreach (var item in results)
-                {
-                    Console.WriteLine($"ITEM {item.Name} - {item.Description}");
-                }
-            }
-        }
-
-        static void GetItemsForListingWithParams()
-        {
-            using (var db = new InventoryDbContext(_optionsBuilder.Options))
-            {
-                var minDate = new SqlParameter("minDate", new DateTime(2022, 1, 1));
-                var maxDate = new SqlParameter("maxDate", new DateTime(2022, 1, 4));
-
-                var results = db.ItemsForListing.FromSqlRaw("EXECUTE dbo.GetItemsForListing @minDate, @maxDate", minDate, maxDate).ToList();
-
-                foreach (var item in results)
-                {
-                    Console.WriteLine($"ITEM {item.Name} - {item.Description} - {item.CategoryName}");
-                }
-            }
+            AllActiveItemsPipeDelimitedString();
+            GetItemsTotalValues();
         }
 
         static void BuildOptions()
@@ -61,19 +30,6 @@ namespace Activity0302_EFCoreNewDb
             _optionsBuilder.UseSqlServer(_configuration.GetConnectionString("InventoryManager"));
         }
 
-        static void DealeteAllItems()
-        {
-            using (var db = new InventoryDbContext())
-            {
-                var items = db.Items.ToList();
-                foreach (var item in items)
-                {
-                    item.LastModifiedUserId = 1;
-                }
-                db.Items.RemoveRange(items);
-                db.SaveChanges();
-            }
-        }
         static void ListInventory()
         {
             using (var dbContext = new InventoryDbContext(_optionsBuilder.Options))
@@ -84,41 +40,51 @@ namespace Activity0302_EFCoreNewDb
 
         }
 
-        static void InsertItems()
-        {
-            var items = new List<Item>
-            {
-                new Item { Name = "Top Gun", IsActive = true, Description="I feel the need, the need for speed" },
-                new Item { Name = "Batman Begins", IsActive = true, Description = "Attitude reflects leadership" },
-                new Item { Name = "Inception", IsActive = true, Description = "You either die the hero or live long" },
-                new Item { Name = "Star Wars: The Empire Strikes Back", IsActive = true, Description = "He will join us or die, master" },
-                new Item { Name = "Remember the Titans", IsActive = true, Description = "Attitude reflects leadership" }
-            };
-
-            using (var dbContext = new InventoryDbContext(_optionsBuilder.Options))
-            {
-                foreach (var item in items)
-                {
-                    item.CreatedByUserId = 1;
-                }
-                dbContext.Items.AddRange(items);
-                dbContext.SaveChanges();
-            }
-        }
-
-        static void UpdateItems()
+        static void GetItemsForListingWithParams()
         {
             using (var db = new InventoryDbContext(_optionsBuilder.Options))
             {
-                var items = db.Items.ToList();
-                foreach (var item in items)
-                {
-                    item.LastModifiedUserId = 1;
-                    item.CurrentOrFinalPrice = 9.99M;
-                }
-                db.Items.UpdateRange(items);
-                db.SaveChanges();
+                var minDate = new SqlParameter("minDate", new DateTime(2022, 1, 1));
+                var maxDate = new SqlParameter("maxDate", new DateTime(2022, 1, 30));
 
+                var results = db.ItemsForListing.FromSqlRaw("EXECUTE dbo.GetItemsForListing @minDate, @maxDate", minDate, maxDate).ToList();
+
+                foreach (var item in results)
+                {
+                    Console.WriteLine($"ITEM {item.Name} - {item.Description} - {item.CategoryName}");
+                }
+            }
+        }
+
+        static void AllActiveItemsPipeDelimitedString()
+        {
+            using (var db = new InventoryDbContext(_optionsBuilder.Options))
+
+            {
+                var isActiveParm = new SqlParameter("IsActive", 1);
+                var result = db.AllItemsOutput
+                .FromSqlRaw("SELECT [dbo].[ItemNamesPipeDelimitedString](@IsActive) AllItems", isActiveParm)
+                .FirstOrDefault();
+                Console.WriteLine($"All active Items: {result.AllItems}");
+            }
+        }
+
+        static void GetItemsTotalValues()
+        {
+            using (var db = new InventoryDbContext(_optionsBuilder.Options))
+
+            {
+                var isActiveParm = new SqlParameter("IsActive", 1);
+                var result = db.GetItemsTotalValues
+                .FromSqlRaw("SELECT * from [dbo].[GetItemsTotalValue](@IsActive)", isActiveParm)
+                .ToList();
+                foreach (var item in result)
+                {
+                    Console.WriteLine($"New Item] {item.Id,-10}" +
+                    $"|{item.Name,-50}" +
+                    $"|{item.Quantity,-4}" +
+                    $"|{item.TotalValue,-5}");
+                }
             }
         }
     }
