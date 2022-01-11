@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.SqlClient;
+using AutoMapper;
+using InventoryModels.DTOs;
 
 namespace Activity0302_EFCoreNewDb
 {
@@ -14,9 +16,14 @@ namespace Activity0302_EFCoreNewDb
     {
         static IConfigurationRoot _configuration;
         static DbContextOptionsBuilder<InventoryDbContext> _optionsBuilder;
+
+        private static MapperConfiguration _mapperConfig;
+        private static IMapper _mapper;
+        private static IServiceProvider _serviceProvider;
         static void Main(string[] args)
         {
             BuildOptions();
+            BuildMapper();
             ListInventory();
             GetItemsForListingWithParams();
             AllActiveItemsPipeDelimitedString();
@@ -31,12 +38,27 @@ namespace Activity0302_EFCoreNewDb
             _optionsBuilder.UseSqlServer(_configuration.GetConnectionString("InventoryManager"));
         }
 
+        static void BuildMapper()
+        {
+            //_configuration = ConfigurationBuilderSingleton.ConfigurationRoot;
+            //_optionsBuilder = new DbContextOptionsBuilder<InventoryDbContext>();
+            //_optionsBuilder.UseSqlServer(_configuration.GetConnectionString("InventoryManager"));
+
+            _mapperConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<InventoryMapper>();
+            });
+            _mapperConfig.AssertConfigurationIsValid();
+            _mapper = _mapperConfig.CreateMapper();
+        }
+
         static void ListInventory()
         {
             using (var dbContext = new InventoryDbContext(_optionsBuilder.Options))
             {
-                dbContext.Items.Take(5).OrderBy(x => x.Name).ToList()
-               .ForEach(i => Console.WriteLine($"{i.Id} - {i.Name}"));
+                var items = dbContext.Items.Take(5).OrderBy(x => x.Name).ToList();
+                var result = _mapper.Map<List<Item>, List<ItemDto>>(items);
+                result.ForEach(x => Console.WriteLine($"New Item: {x}"));
             }
 
         }
