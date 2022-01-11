@@ -21,6 +21,7 @@ namespace Activity0302_EFCoreNewDb
             GetItemsForListingWithParams();
             AllActiveItemsPipeDelimitedString();
             GetItemsTotalValues();
+            GetItemsWithGenres();
         }
 
         static void BuildOptions()
@@ -84,6 +85,20 @@ namespace Activity0302_EFCoreNewDb
                     $"|{item.Name,-50}" +
                     $"|{item.Quantity,-4}" +
                     $"|{item.TotalValue,-5}");
+                }
+            }
+        }
+
+        static void GetItemsWithGenres()
+        {
+            using (var db = new InventoryDbContext(_optionsBuilder.Options))
+            {
+                var result = db.ItemsWithGenres.ToList();
+                foreach (var item in result)
+                {
+                    Console.WriteLine($"New Item] {item.Id,-10}" +
+                    $"|{item.Name,-50}" +
+                    $"|{item.Genre ?? "",-4}");
                 }
             }
         }

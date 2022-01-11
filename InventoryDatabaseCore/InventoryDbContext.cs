@@ -20,6 +20,7 @@ namespace InventoryDatabaseCore
         public DbSet<GetItemsForListingDTO> ItemsForListing { get; set; }
         public DbSet<AllItemsPipeDelimitedStringDto> AllItemsOutput { get; set; }
         public DbSet<GetItemsTotalValueDto> GetItemsTotalValues { get; set; }
+        public DbSet<ItemsWithGenresDto> ItemsWithGenres { get; set; }
 
         public InventoryDbContext() : base()
         {
@@ -54,13 +55,14 @@ namespace InventoryDatabaseCore
                 x.ToView("GetItemsTotalValues");
             });
 
+            var createdDate = new DateTime(2022, 01, 01);
             modelBuilder.Entity<Genre>(x =>
             {
                 x.HasData(
                 new Genre()
                 {
                     Id = 6,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = createdDate,
                     IsActive = true,
                     IsDeleted = false,
                     Name = "Fantasy"
@@ -68,7 +70,7 @@ namespace InventoryDatabaseCore
                 new Genre()
                 {
                     Id = 7,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = createdDate,
                     IsActive = true,
                     IsDeleted = false,
                     Name = "Sci/Fi"
@@ -76,7 +78,7 @@ namespace InventoryDatabaseCore
                 new Genre()
                 {
                     Id = 8,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = createdDate,
                     IsActive = true,
                     IsDeleted = false,
                     Name = "Horror"
@@ -84,7 +86,7 @@ namespace InventoryDatabaseCore
                 new Genre()
                 {
                     Id = 9,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = createdDate,
                     IsActive = true,
                     IsDeleted = false,
                     Name = "Comedy"
@@ -92,12 +94,18 @@ namespace InventoryDatabaseCore
                 new Genre()
                 {
                     Id = 10,
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = createdDate,
                     IsActive = true,
                     IsDeleted = false,
                     Name = "Drama"
                 }
                 );
+            });
+
+            modelBuilder.Entity<ItemsWithGenresDto>(x =>
+            {
+                x.HasNoKey();
+                x.ToView("ItemsWithGenres");
             });
         }
 
