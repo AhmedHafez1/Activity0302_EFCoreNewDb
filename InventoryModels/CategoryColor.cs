@@ -19,7 +19,5 @@ namespace InventoryModels
         public string ColorValue { get; set; }
 
         public virtual Category Category { get; set; }
-
-
     }
 }

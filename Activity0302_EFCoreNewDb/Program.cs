@@ -9,6 +9,7 @@ using System.Linq;
 using Microsoft.Data.SqlClient;
 using AutoMapper;
 using InventoryModels.DTOs;
+using AutoMapper.QueryableExtensions;
 
 namespace Activity0302_EFCoreNewDb
 {
@@ -24,11 +25,45 @@ namespace Activity0302_EFCoreNewDb
         {
             BuildOptions();
             BuildMapper();
-            ListInventory();
-            GetItemsForListingWithParams();
-            AllActiveItemsPipeDelimitedString();
-            GetItemsTotalValues();
-            GetItemsWithGenres();
+            //ListInventory();
+            //ListInventoryWithProjection();
+            ListCategoriesAndColors();
+
+            //GetItemsForListingWithParams();
+
+            //AllActiveItemsPipeDelimitedString();
+            //GetItemsTotalValues();
+            //GetItemsWithGenres();
+
+            //GetItemsForListingLinq();
+        }
+
+        private static void GetItemsForListingLinq()
+        {
+            var minDateValue = new DateTime(2022, 1, 1);
+            var maxDateValue = new DateTime(2023, 1, 1);
+
+            using (var db = new InventoryDbContext(_optionsBuilder.Options))
+            {
+                var results = db.Items.Select(x => new GetItemsForListingWithDateDto
+                {
+                    CreatedDate = x.CreatedDate,
+                    CategoryName = x.Category.Name,
+                    Description = x.Description,
+                    IsActive = x.IsActive,
+                    IsDeleted = x.IsDeleted,
+                    Name = x.Name,
+                    Notes = x.Notes
+                }).Where(x => x.CreatedDate >= minDateValue &&
+                x.CreatedDate <= maxDateValue)
+                .OrderBy(y => y.CategoryName)
+                .ToList();
+
+                foreach (var item in results)
+                {
+                    Console.WriteLine($"ITEM {item.CategoryName}| {item.Name} - { item.Description}");
+                }
+            }
         }
 
         static void BuildOptions()
@@ -40,10 +75,6 @@ namespace Activity0302_EFCoreNewDb
 
         static void BuildMapper()
         {
-            //_configuration = ConfigurationBuilderSingleton.ConfigurationRoot;
-            //_optionsBuilder = new DbContextOptionsBuilder<InventoryDbContext>();
-            //_optionsBuilder.UseSqlServer(_configuration.GetConnectionString("InventoryManager"));
-
             _mapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<InventoryMapper>();
@@ -61,6 +92,30 @@ namespace Activity0302_EFCoreNewDb
                 result.ForEach(x => Console.WriteLine($"New Item: {x}"));
             }
 
+        }
+
+        static void ListCategoriesAndColors()
+        {
+            using (var db = new InventoryDbContext(_optionsBuilder.Options))
+            {
+                var result = db.Categories.Include(x => x.CategoryColor)
+                    .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
+                    .ToList();
+
+                foreach (var c in result)
+                {
+                    Console.WriteLine($"{c.Category} | {c.CategoryColor.Color}");
+                }
+            }
+        }
+
+        static void ListInventoryWithProjection()
+        {
+            using (var dbContext = new InventoryDbContext(_optionsBuilder.Options))
+            {
+                var items = dbContext.Items.Take(5).OrderBy(x => x.Name).ProjectTo<ItemDto>(_mapper.ConfigurationProvider).ToList();
+                items.ForEach(x => Console.WriteLine($"New Item: {x}"));
+            }
         }
 
         static void GetItemsForListingWithParams()

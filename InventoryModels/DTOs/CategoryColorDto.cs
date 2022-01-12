@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace InventoryModels.DTOs
 {
-    public class CategoryDto
+    public class CategoryColorDto
     {
-        public string Category { get; set; }
-        public CategoryColorDto CategoryColor { get; set; }
+        public string Color { get; set; }
     }
 }

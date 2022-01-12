@@ -21,7 +21,7 @@ namespace InventoryDataMigrator
         {
             BuildOptions();
             EnsureAndRunMigrations();
-            ExecuteCustomSeedData(); 
+            ExecuteCustomSeedData();
         }
 
         static void EnsureAndRunMigrations()
@@ -34,8 +34,7 @@ namespace InventoryDataMigrator
 
         private static void ExecuteCustomSeedData()
         {
-            using (var context = new InventoryDbContext(_optionsBuilder.
-            Options))
+            using (var context = new InventoryDbContext(_optionsBuilder.Options))
             {
                 var buildCategories = new BuildCategories(context);
                 buildCategories.ExecuteSeed();
