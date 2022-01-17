@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using InventoryDatabaseCore;
+using InventoryModels;
 using InventoryModels.DTOs;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -76,10 +77,12 @@ namespace InventoryDatabaseLayer
                      .ToList();
         }
 
-        public List<ItemDto> ListInventory()
+        public List<Item> ListInventory()
         {
-            var items = _context.Items.AsEnumerable().OrderBy(x => x.Name).ToList();
-            return _mapper.Map<List<ItemDto>>(items);
+            return _context.Items.Include(x=> x.Category)
+                .AsEnumerable()
+                .Where(x => !x.IsDeleted)
+                .OrderBy(x => x.Name).ToList();
         }
     }
 }
