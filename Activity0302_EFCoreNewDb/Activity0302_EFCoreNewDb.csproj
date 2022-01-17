@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InventoryDatabaseCore\InventoryDatabaseCore.csproj" />
+    <ProjectReference Include="..\InventoryBusinessLayer\InventoryBusinessLayer.csproj" />
     <ProjectReference Include="..\InventoryHelpers\InventoryHelpers.csproj" />
   </ItemGroup>
 

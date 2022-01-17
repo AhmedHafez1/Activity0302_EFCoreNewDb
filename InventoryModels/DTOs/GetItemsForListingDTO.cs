@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InventoryModels.DTOs
 {
-    public class GetItemsForListingDTO
+    public class GetItemsForListingDto
     {
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";

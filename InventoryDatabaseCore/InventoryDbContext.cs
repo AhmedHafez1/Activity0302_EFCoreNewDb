@@ -17,7 +17,7 @@ namespace InventoryDatabaseCore
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryColor> CategoryColors { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<GetItemsForListingDTO> ItemsForListing { get; set; }
+        public DbSet<GetItemsForListingDto> ItemsForListing { get; set; }
         public DbSet<AllItemsPipeDelimitedStringDto> AllItemsOutput { get; set; }
         public DbSet<GetItemsTotalValueDto> GetItemsTotalValues { get; set; }
         public DbSet<ItemsWithGenresDto> ItemsWithGenres { get; set; }
@@ -37,7 +37,7 @@ namespace InventoryDatabaseCore
             .IsUnique()
             .IsClustered(false);
 
-            modelBuilder.Entity<GetItemsForListingDTO>(x =>
+            modelBuilder.Entity<GetItemsForListingDto>(x =>
             {
                 x.HasNoKey();
                 x.ToView("ItemsForListing");

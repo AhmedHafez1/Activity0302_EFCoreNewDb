@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InventoryModels.DTOs
 {
-    public class GetItemsForListingWithDateDto : GetItemsForListingDTO
+    public class GetItemsForListingWithDateDto : GetItemsForListingDto
     {
         public DateTime CreatedDate { get; set; }
     }
