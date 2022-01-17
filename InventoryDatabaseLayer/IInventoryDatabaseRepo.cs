@@ -1,4 +1,5 @@
-﻿using InventoryModels.DTOs;
+﻿using InventoryModels;
+using InventoryModels.DTOs;
 using System;
 using System.Collections.Generic;
 
@@ -12,6 +13,10 @@ namespace InventoryDatabaseLayer
         List<GetItemsTotalValueDto> GetItemsTotalValues(bool isActive);
         List<ItemsWithGenresDto> GetItemsWithGenres();
         List<CategoryDto> ListCategoriesAndColors();
-        List<ItemDto> ListInventory();
+        List<Item> ListInventory();
+        int InsertOrUpdateItem(Item item);
+        void InsertOrUpdateItems(List<Item> items);
+        void DeleteItem(int id);
+        void DeleteItems(List<int> itemIds);
     }
 }
