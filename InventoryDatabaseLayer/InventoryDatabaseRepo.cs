@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Transactions;
 
 namespace InventoryDatabaseLayer
 {
@@ -26,14 +27,14 @@ namespace InventoryDatabaseLayer
         public void DeleteItem(int id)
         {
             var item = _context.Items.FirstOrDefault(x => x.Id == id);
-            if (item == null) return;
+            if (item == null) throw new Exception("Could not Delete the item");
             item.IsDeleted = true;
             _context.SaveChanges();
         }
 
         public void DeleteItems(List<int> itemIds)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }))
             {
                 try
                 {
@@ -41,12 +42,11 @@ namespace InventoryDatabaseLayer
                     {
                         DeleteItem(itemId);
                     }
-                    transaction.Commit();
+                    scope.Complete();
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    transaction.Rollback();
                     throw;
                 }
             }
@@ -144,7 +144,7 @@ namespace InventoryDatabaseLayer
 
         public void InsertOrUpdateItems(List<Item> items)
         {
-            using (var transaction = _context.Database.BeginTransaction())
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadUncommitted }))
             {
                 try
                 {
@@ -153,13 +153,12 @@ namespace InventoryDatabaseLayer
                         var success = InsertOrUpdateItem(item) > 0;
                         if (!success) throw new Exception($"Error saving the item { item.Name }");
                     }
-                    transaction.Commit();
+                    scope.Complete();
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.ToString());
-                    transaction.Rollback();
-                    throw ex;
+                    throw;
                 }
             }
         }

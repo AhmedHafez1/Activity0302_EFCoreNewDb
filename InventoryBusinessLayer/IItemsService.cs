@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace InventoryBusinessLayer
 {
-    interface IItemsService
+    public interface IItemsService
     {
         List<GetItemsForListingWithDateDto> GetItemsForListingLinq(DateTime minDateValue, DateTime maxDateValue);
         List<GetItemsForListingDto> GetItemsForListingFromProcedure(DateTime minDateValue, DateTime maxDateValue);
@@ -16,5 +16,9 @@ namespace InventoryBusinessLayer
         List<ItemsWithGenresDto> GetItemsWithGenres();
         List<CategoryDto> ListCategoriesAndColors();
         List<ItemDto> ListInventory();
+        int InsertOrUpdateItem(CreateOrUpdateItemDto item);
+        void InsertOrUpdateItems(List<CreateOrUpdateItemDto> item);
+        void DeleteItem(int id);
+        void DeleteItems(List<int> itemIds);
     }
 }
